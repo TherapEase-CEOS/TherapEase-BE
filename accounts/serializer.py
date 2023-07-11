@@ -20,9 +20,9 @@ class LoginSerializer(serializers.Serializer):
         except User.DoesNotExist:
             raise serializers.ValidationError("유효하지 않은 코드입니다.")
 
-        if code.startswith('ee'):
+        if user.code.startswith('ee'):
             role = '내담자'
-        elif code.startswith('or'):
+        elif user.code.startswith('or'):
             role = '상담사'
         else:
             raise serializers.ValidationError("유효하지 않은 코드입니다.")
@@ -31,12 +31,12 @@ class LoginSerializer(serializers.Serializer):
         access = refresh.access_token
 
         data = {
-            'id': user.username,
-            'refresh': str(refresh),
-            'access': str(access),
-            'role': role,
+            'id': user.id,
             'name': user.name,
-            'userId': user.id
+            'code': user.code,
+            'role': role,
+            'refresh': str(refresh),
+            'access': str(access)
         }
 
         return data
