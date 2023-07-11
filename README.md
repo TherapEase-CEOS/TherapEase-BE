@@ -1,2 +1,2 @@
-# TherapEase Backend...
+# TherapEase Backend
 
