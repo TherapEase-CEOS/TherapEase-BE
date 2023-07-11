@@ -1,13 +1,12 @@
-from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
-User = get_user_model()
+from .models import User, Counselor
 
-class UserSerializer(serializers.ModelSerializer):
+class CounselorProfileSerializer(serializers.Serializer):
     class Meta:
-        model = User
-        fields = ('id', 'name', 'code')
+        model = Counselor
+        fields = ('contact', 'introduction', 'engagement')
 
 class LoginSerializer(serializers.Serializer):
     code = serializers.CharField(write_only=True, required=True)
