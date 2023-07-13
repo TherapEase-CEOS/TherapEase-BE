@@ -6,7 +6,7 @@ from .models import User, Counselor
 class CounselorProfileSerializer(serializers.Serializer):
     class Meta:
         model = Counselor
-        fields = ('contact', 'introduction', 'engagement')
+        fields = ('contact', 'introduction')
 
 class LoginSerializer(serializers.Serializer):
     code = serializers.CharField(write_only=True, required=True)
