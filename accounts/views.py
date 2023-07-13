@@ -2,8 +2,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from .models import Counselor
+from .models import Counselor, User
 from .serializer import LoginSerializer, CounselorProfileSerializer
+from rest_framework import generics
 
 class UserLoginView(APIView):
     def post(self, request):
@@ -12,28 +13,26 @@ class UserLoginView(APIView):
         data = serializer.validated_data
         return Response(data)
 
-class CounselorProfileView(APIView):
+class CounselorProfileView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
-    def patch(self, request, id):
+    queryset = Counselor.objects.all()
+    serializer_class = CounselorProfileSerializer
+
+    def get_object(self):
+        user = self.request.user
         try:
-            counselor = Counselor.objects.get(counselor_id=id)
-        except Counselor.DoesNotExist:
-            raise NotFound("상담사 프로필을 수정할 수 없습니다.")
-
-        serializer = CounselorProfileSerializer(counselor, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-
-        return Response(serializer.errors, status=400)
-
-    def get(self, request, id):
-        try:
-            counselor = Counselor.objects.get(counselor_id=id)
+            counselor = Counselor.objects.get(counselor=user)
         except Counselor.DoesNotExist:
             raise NotFound("상담사 프로필을 찾을 수 없습니다.")
+        return counselor
 
-        serializer = CounselorProfileSerializer(counselor)
-        return Response(serializer.data)
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 
