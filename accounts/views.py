@@ -23,8 +23,18 @@ class CounselorProfileView(generics.UpdateAPIView):
         try:
             counselor = Counselor.objects.get(counselor=user)
         except Counselor.DoesNotExist:
-            raise NotFound("상담사 프로필을 찾을 수 없습니다.")
+            counselor = Counselor.objects.create(counselor=user)
         return counselor
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
