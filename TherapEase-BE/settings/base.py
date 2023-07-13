@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'api',
     'accounts',
     'rest_framework',
+    'counselees',
 ]
 
 REST_FRAMEWORK = {
