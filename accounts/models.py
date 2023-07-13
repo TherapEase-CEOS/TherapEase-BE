@@ -19,6 +19,6 @@ class Counselor(models.Model):
     counselor = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = models.EmailField(max_length=30)
     introduction = models.CharField(max_length=200)
-    introduction = models.CharField(max_length=200)
+    #introduction = models.CharField(max_length=200)
     # engagement = models.CharField(max_length=150)
 
