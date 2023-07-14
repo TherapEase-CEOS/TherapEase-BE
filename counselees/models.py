@@ -7,7 +7,7 @@ class Counselee(models.Model):
     start = models.DateTimeField()
     progress = models.BooleanField()
     counselingDate = models.CharField(max_length=255)
-    goal = models.CharField(max_length=255, default='상담 목표를 입력해주세요!')
+    goal = models.CharField(max_length=255, null=True, default='상담 목표를 입력해주세요!')
 
     def __str__(self):
         return self.name

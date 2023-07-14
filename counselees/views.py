@@ -1,3 +1,5 @@
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Counselee
@@ -44,15 +46,15 @@ class CounseleeCompleteView(APIView):
             counselee = Counselee.objects.get(pk=pk)
             counselee.progress = False
             counselee.save()
-            return Response({'message': 'Counseling completed.'})
+            return Response({'message': '상담이 완료되었습니다.'})
         except Counselee.DoesNotExist:
-            return Response({'error': 'Counselee not found.'}, status=404)
+            return Response({'error': '내담자가 존재하지 않습니다.'}, status=404)
 
 class CounseleeDeleteView(APIView):
     def delete(self, request, pk):
         try:
             counselee = Counselee.objects.get(pk=pk)
             counselee.delete()
-            return Response({'message': 'Counselee deleted.'})
+            return Response({'message': '삭제가 완료되었습니다.'})
         except Counselee.DoesNotExist:
-            return Response({'error': 'Counselee not found.'}, status=404)
+            return Response({'error': '내담자가 존재하지 않습니다.'}, status=404)
