@@ -22,4 +22,4 @@ class Emotion(models.Model):
     feeling = models.IntegerField(choices=feeling_choices)
     intensity = models.IntegerField()
     details = models.TextField(blank=True, null=True)
-    recorded_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)

@@ -4,3 +4,4 @@ from .views import EmotionCreateView
 urlpatterns = [
     path('emotion/', EmotionCreateView.as_view(), name='emotion-create'),
 ]
+
