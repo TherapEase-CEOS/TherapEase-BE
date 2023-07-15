@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 
 class Schedule(models.Model):
@@ -8,7 +9,7 @@ class Schedule(models.Model):
     thursday = models.JSONField(default=list)
     friday = models.JSONField(default=list)
     saturday = models.JSONField(default=list)
-    latestUpdated = models.DateField()
+    latestUpdated = models.DateField(null=True, blank=True, default=date.today)
 
     def __str__(self):
         return f"Schedule - {self.latestUpdated}"
