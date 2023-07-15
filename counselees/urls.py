@@ -14,4 +14,3 @@ urlpatterns = [
     path('complete/<int:pk>/', CounseleeCompleteView.as_view(), name='counselee-complete'),
     path('delete/<int:pk>/', CounseleeDeleteView.as_view(), name='counselee-delete'),
 ]
-
