@@ -48,14 +48,18 @@ class EmotionListView(APIView):
         emotions_data = []
         for emotion in emotions[start_index:end_index]:
             emotions_data.append({
-                'main_emotion': emotion.main_emotion,
-                'sub_emotion': emotion.sub_emotion,
-                'feeling': str(emotion.feeling),
-                'intensity': emotion.intensity,
+                'date': emotion.created_at.date().isoformat(),  # 날짜를 ISO 형식으로 변환하여 추가
+                'emotions': [
+                    {
+                        'main_emotion': emotion.main_emotion,
+                        'sub_emotion': emotion.sub_emotion,
+                        'feeling': str(emotion.feeling),
+                        'intensity': emotion.intensity,
+                    }
+                ],
                 'details1': emotion.details1,
                 'details2': emotion.details2,
                 'details3': emotion.details3,
-                'account': account_id,
             })
 
         response_data = {
