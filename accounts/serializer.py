@@ -9,7 +9,7 @@ from .models import User, Counselor
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
-        token = super().get_token(user)
+        token = super(cls, cls).get_token(user)
 
         # Access 토큰 유효 기간 설정
         token.set_exp(lifetime=timedelta(days=7))  # 7일로 설정
