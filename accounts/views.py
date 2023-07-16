@@ -5,8 +5,11 @@ from rest_framework.exceptions import NotFound
 from .models import Counselor, User
 from .serializer import LoginSerializer, CounselorProfileSerializer
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
 class UserLoginView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
