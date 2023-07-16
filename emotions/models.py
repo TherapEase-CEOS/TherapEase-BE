@@ -30,3 +30,4 @@ class Emotion(models.Model):
     # Using the User model from accounts app
     account = models.ForeignKey(User, on_delete=models.CASCADE, related_name='emotions', null=False)
 
+#
