@@ -1,5 +1,8 @@
 from django.db import models
 
+from accounts.models import User
+
+
 class Emotion(models.Model):
     main_emotion_choices = [
         ('sad', 'Sad'),
@@ -24,4 +27,6 @@ class Emotion(models.Model):
     details2 = models.TextField(blank=True, null=True)
     details3 = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    # Using the User model from accounts app
+    account = models.ForeignKey(User, on_delete=models.CASCADE, related_name='emotions', null=False)
 
