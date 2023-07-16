@@ -38,9 +38,31 @@ class EmotionListView(APIView):
 
     def get(self, request, account_id):
         user = User.objects.get(id=account_id)
-        emotions = Emotion.objects.filter(account=user)
-        serializer = EmotionSerializer(emotions, many=True)
-        return Response(serializer.data)
+        emotions = Emotion.objects.filter(account=user).order_by('-created_at')
+
+        page = request.query_params.get('page', 1)
+        page_size = 7
+        start_index = (int(page) - 1) * page_size
+        end_index = int(page) * page_size
+
+        emotions_data = []
+        for emotion in emotions[start_index:end_index]:
+            emotions_data.append({
+                'main_emotion': emotion.main_emotion,
+                'sub_emotion': emotion.sub_emotion,
+                'feeling': str(emotion.feeling),
+                'intensity': emotion.intensity,
+                'details1': emotion.details1,
+                'details2': emotion.details2,
+                'details3': emotion.details3,
+                'account': account_id,
+            })
+
+        response_data = {
+            'page': int(page),
+            'records': emotions_data,
+        }
+        return Response(response_data)
 
 
 class EmotionGraphView(APIView):
