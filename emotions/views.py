@@ -43,3 +43,23 @@ class EmotionListView(APIView):
         return Response(serializer.data)
 
 
+class EmotionGraphView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, account_id):
+        user = User.objects.get(id=account_id)
+        emotions = Emotion.objects.filter(account=user)
+
+        graph_data = []
+        for emotion in emotions:
+            date = emotion.created_at.date().isoformat()
+            emotions_data = {
+                'mainEmotion': emotion.main_emotion,
+                'subEmotion': emotion.sub_emotion,
+                'feeling': emotion.feeling,
+                'intensity': emotion.intensity,
+            }
+            graph_data.append({date: {'emotions': [emotions_data]}})
+
+        response_data = {'records': graph_data}
+        return Response(response_data)
