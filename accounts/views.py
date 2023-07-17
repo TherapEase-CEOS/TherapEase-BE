@@ -1,11 +1,12 @@
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from .models import Counselor, User
 from .serializer import LoginSerializer, CounselorProfileSerializer
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 class UserLoginView(APIView):
     permission_classes = [AllowAny]
@@ -15,6 +16,8 @@ class UserLoginView(APIView):
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         return Response(data)
+
+
 
 class CounselorProfileView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
@@ -47,5 +50,6 @@ class CounselorProfileView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+
 
 
