@@ -17,9 +17,9 @@ class Emotion(models.Model):
         ('1', 'Positive'),
     ]
 
-    main_emotion = models.CharField(max_length=10, choices=main_emotion_choices)
-    sub_emotion = models.CharField(max_length=50)
-    feeling = models.CharField(max_length=2, choices=feeling_choices, default='-1')
+    main_emotion = models.CharField(max_length=10, choices=main_emotion_choices, null=True) # null=True 추가
+    sub_emotion = models.CharField(max_length=50, null=True)
+    feeling = models.CharField(max_length=2, choices=feeling_choices, default='-1', null=True)
     intensity = models.IntegerField()
     details1 = models.TextField(blank=True, null=True)
     details2 = models.TextField(blank=True, null=True)

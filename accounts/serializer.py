@@ -20,8 +20,8 @@ class LoginSerializer(serializers.Serializer):
     code = serializers.CharField(write_only=True, required=True)
 
     def validate(self, attrs):
-        code = attrs.get('code', None)
-        name = attrs.get('name', None)
+        code = attrs.get('code', None) #pw
+        name = attrs.get('name', None) #id
 
         try:
             user = User.objects.get(code=code, name=name)
