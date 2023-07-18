@@ -8,8 +8,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-
-class UserLoginView(APIView):
+class UserLoginView(APIView) :
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -53,6 +52,7 @@ class CounselorProfileView(generics.UpdateAPIView):
         return self.update(request, *args, **kwargs)
 
 
+# refresh tkn 관련 코드 추가!
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
