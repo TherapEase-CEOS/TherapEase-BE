@@ -12,6 +12,7 @@ class LoginSerializer(serializers.Serializer):
     code = serializers.CharField(write_only=True, required=True)
 
     def validate(self, attrs):
+        #name = attrs.get('name',None)
         code = attrs.get('code', None)
 
         try:
