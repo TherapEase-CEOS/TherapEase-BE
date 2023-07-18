@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class UserLoginView(APIView):
@@ -52,4 +53,20 @@ class CounselorProfileView(generics.UpdateAPIView):
         return self.update(request, *args, **kwargs)
 
 
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        # get_token 메서드가 보기에 대한 새로 고침 토큰을 생성하고 다시 보기의 액세스 토큰을 생성
+        token = super().get_token(user)
 
+        # Add custom claims
+        token['username'] = user.name
+        # ...
+        token['code'] = user.code
+        token['role'] = user.role
+        token['accountId'] = user.accountId
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
