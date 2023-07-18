@@ -28,7 +28,7 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("유효하지 않은 코드입니다.")
 
         # CustomTokenObtainPairSerializer를 사용하여 토큰 발급
-        token_serializer = CustomTokenObtainPairSerializer(data={"username": code, "password": ""})
+        token_serializer = CustomTokenObtainPairSerializer(data={"username": user.username, "password": code})
         token_serializer.is_valid(raise_exception=True)
         token = token_serializer.validated_data
 

@@ -12,8 +12,6 @@ class User(AbstractUser):
     accountId = models.CharField(max_length=100)
     name = models.CharField(max_length=10)
 
-
-
 class Counselor(models.Model):
     # user 모델과 profile을 1:1로 연결
     counselor = models.OneToOneField(User, on_delete=models.CASCADE)
