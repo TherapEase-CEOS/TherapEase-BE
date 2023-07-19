@@ -6,7 +6,7 @@ from .views import (
     CounseleeCompleteView,
     CounseleeDeleteView
 )
-
+#
 urlpatterns = [
     path('', CounseleeCreateView.as_view(), name='counselee-create'),
     path('', CounseleeListView.as_view(), name='counselee-list'),
