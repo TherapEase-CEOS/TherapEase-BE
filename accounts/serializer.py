@@ -1,8 +1,11 @@
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 
 from .models import User, Counselor
+
 
 
 class LoginSerializer(serializers.Serializer):
@@ -33,7 +36,7 @@ class LoginSerializer(serializers.Serializer):
             'code': user.code,
             'role': role,
             'refresh': str(refresh),
-            'access': str(access)
+            'access': str(access),
         }
 
         return data
