@@ -19,17 +19,14 @@ class UserLoginView(APIView):
 
 
 
-class CounselorProfileView(generics.UpdateAPIView):
+class CounselorProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Counselor.objects.all()
     serializer_class = CounselorProfileSerializer
 
     def get_object(self):
         user = self.request.user
-        try:
-            counselor = Counselor.objects.get(counselor=user)
-        except Counselor.DoesNotExist:
-            counselor = Counselor.objects.create(counselor=user)
+        counselor, created = Counselor.objects.get_or_create(counselor=user)
         return counselor
 
     def update(self, request, *args, **kwargs):
@@ -43,10 +40,16 @@ class CounselorProfileView(generics.UpdateAPIView):
         return self.update(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+        counselor = self.get_object()
+        serializer = self.get_serializer(counselor)
+        return Response(serializer.data)
 
     def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
+        counselor = self.get_object()
+        serializer = self.get_serializer(counselor, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
