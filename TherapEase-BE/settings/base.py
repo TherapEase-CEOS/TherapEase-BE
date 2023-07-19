@@ -36,7 +36,7 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = []
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(weeks=2),
+    'ACCESS_TOKEN_LIFETIME': timedelta(weeks=4),
 }
 
 # Application definition
