@@ -1,15 +1,27 @@
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from accounts.models import User
-
 from .models import Emotion
 from .serializers import EmotionSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class EmotionCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, account_id):
+    def get_account_id_from_token(self, request):
+        try:
+            user, _ = JWTAuthentication().authenticate(request)
+            return user.id
+        except Exception as e:
+            return None
+
+    def post(self, request):
+        account_id = self.get_account_id_from_token(request)
+        if account_id is None:
+            return Response({"detail": "토큰이 유효하지 않습니다."}, status=401)
+
         data = request.data.get('records', [{}])[0]
         date_key = next(iter(data.keys()))  # 첫 번째 키 가져오기
         emotions_data = data.get(date_key, {}).get('emotions', [])
