@@ -42,9 +42,11 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 class CounselorProfileSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='counselor.name', read_only=True)
+
     class Meta:
         model = Counselor
-        fields = ('contact', 'introduction')
+        fields = ('name', 'contact', 'introduction')
 
 
 
