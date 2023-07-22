@@ -52,6 +52,7 @@ CORS_ALLOW_METHODS = (  #<-실제 요청에 허용되는 HTTP 동사 리스트
 )
 
 CORS_ALLOW_HEADERS = ( #<-실제 요청을 할 때 사용될 수 있는 non-standard HTTP 헤더 목록// 현재 기본값
+
     'accept',
     'accept-encoding',
     'authorization',
@@ -65,6 +66,7 @@ CORS_ALLOW_HEADERS = ( #<-실제 요청을 할 때 사용될 수 있는 non-stan
 
 APPEND_SLASH = False #<- / 관련 에러 제거
 
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:3000',
     'http://localhost:3000',
