@@ -77,6 +77,7 @@ CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -88,7 +89,6 @@ INSTALLED_APPS = [
     'counselees',
     'emotions',
     'schedule',
-    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
