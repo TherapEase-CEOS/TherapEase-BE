@@ -18,9 +18,9 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("유효하지 않은 코드입니다.")
 
         if user.code.startswith('ee'):
-            role = '내담자'
+            role = 'counselee'
         elif user.code.startswith('or'):
-            role = '상담사'
+            role = 'counselor'
         else:
             raise serializers.ValidationError("유효하지 않은 코드입니다.")
 
