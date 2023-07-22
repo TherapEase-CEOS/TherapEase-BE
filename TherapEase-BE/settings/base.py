@@ -39,7 +39,7 @@ SIMPLE_JWT = {
 }
 
 ##CORS
-CORS_ORIGIN_ALLOW_ALL=True # <- 모든 호스트 허용
+CORS_ORIGIN_ALLOW_ALL=False
 CORS_ALLOW_CREDENTIALS = True # <-쿠키가 cross-site HTTP 요청에 포함될 수 있다
 
 CORS_ALLOW_METHODS = (  #<-실제 요청에 허용되는 HTTP 동사 리스트
@@ -73,9 +73,11 @@ CORS_ORIGIN_WHITELIST = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
+
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -87,7 +89,6 @@ INSTALLED_APPS = [
     'counselees',
     'emotions',
     'schedule',
-    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
