@@ -65,6 +65,9 @@ CORS_ALLOW_HEADERS = ( #<-실제 요청을 할 때 사용될 수 있는 non-stan
 
 APPEND_SLASH = False #<- / 관련 에러 제거
 
+# CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000' ,'http://localhost:3000']
+CORS_ALLOW_CREDENTIALS = True
+
 # Application definition
 
 INSTALLED_APPS = [
