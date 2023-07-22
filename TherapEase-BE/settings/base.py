@@ -65,7 +65,12 @@ CORS_ALLOW_HEADERS = ( #<-실제 요청을 할 때 사용될 수 있는 non-stan
 
 APPEND_SLASH = False #<- / 관련 에러 제거
 
-# CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000' ,'http://localhost:3000']
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:3000',
+    'http://localhost:3000',
+    'http://ec2-43-201-83-172.ap-northeast-2.compute.amazonaws.com',
+    'https://therapease.co.kr',
+]
 CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
@@ -100,7 +105,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # CORS 관련 추가
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
