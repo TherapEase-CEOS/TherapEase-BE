@@ -73,7 +73,9 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:3000',
     'http://localhost:3000',
     'http://ec2-43-201-83-172.ap-northeast-2.compute.amazonaws.com',
-    'https://therapease.co.kr', #
+    'https://therapease.co.kr',
+    # 'https://therapease-dev.netlify.app/',
+    # 'https://therapease-dev-counselor.netlify.app/',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -93,6 +95,7 @@ INSTALLED_APPS = [
     'counselees',
     'emotions',
     'schedule',
+    'stt',
 ]
 
 REST_FRAMEWORK = {
