@@ -1,12 +1,23 @@
-from rest_framework.exceptions import NotFound
 from .models import Counselor, User
 from .serializer import LoginSerializer, CounselorProfileSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.decorators import api_view, permission_classes
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def check_token(request):
+    user = request.user
+    data = {
+        'id': user.id,
+        'name': user.name,
+        'code': user.code,
+        'role': user.role,
+    }
+    return Response(data)
 
 class UserLoginView(APIView):
     permission_classes = [AllowAny]
