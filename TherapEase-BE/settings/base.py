@@ -95,7 +95,6 @@ INSTALLED_APPS = [
     'counselees',
     'emotions',
     'schedule',
-    'stt',
 ]
 
 REST_FRAMEWORK = {

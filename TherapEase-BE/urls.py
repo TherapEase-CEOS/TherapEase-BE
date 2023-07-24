@@ -23,5 +23,4 @@ urlpatterns = [
     path('counselees/', include('counselees.urls')),
     path('schedule/', include('schedule.urls')),
     path('emotion/', include('emotions.urls')),
-    path('stt/', include('stt.urls'))
 ]
