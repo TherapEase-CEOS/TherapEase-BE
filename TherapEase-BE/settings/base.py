@@ -73,7 +73,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:3000',
     'http://localhost:3000',
     'http://ec2-43-201-83-172.ap-northeast-2.compute.amazonaws.com',
-    'https://therapease.co.kr',
+    'https://therapease.co.kr', #
 ]
 CORS_ALLOW_CREDENTIALS = True
 
