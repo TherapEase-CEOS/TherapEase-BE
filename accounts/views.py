@@ -5,18 +5,24 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework_simplejwt.exceptions import TokenError
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def check_token(request):
     user = request.user
-    data = {
-        'id': user.id,
-        'name': user.name,
-        'code': user.code,
-        'role': user.role,
-    }
+
+    try:
+        data = {
+            'id': user.id,
+            'name': user.name,
+            'code': user.code,
+            'role': user.role,
+        }
+    except AuthenticationFailed:
+        data = None
+
     return Response(data)
 
 class UserLoginView(APIView):
