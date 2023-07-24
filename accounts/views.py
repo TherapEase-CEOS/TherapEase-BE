@@ -1,7 +1,7 @@
 from rest_framework.exceptions import NotFound
 from .models import Counselor, User
 from .serializer import LoginSerializer, CounselorProfileSerializer
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -41,13 +41,8 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
     def get(self, request, *args, **kwargs):
         counselor = self.get_object()
-
-        # 유효한 토큰인지 확인하여 유저 정보를 응답하거나 null 값을 응답
-        if request.user.is_authenticated:
-            serializer = self.get_serializer(counselor)
-            return Response(serializer.data)
-        else:
-            return Response({'user_info': None}, status=status.HTTP_401_UNAUTHORIZED)
+        serializer = self.get_serializer(counselor)
+        return Response(serializer.data)
 
     def patch(self, request, *args, **kwargs):
         counselor = self.get_object()
