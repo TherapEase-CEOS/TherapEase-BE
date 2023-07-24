@@ -74,8 +74,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://ec2-43-201-83-172.ap-northeast-2.compute.amazonaws.com',
     'https://therapease.co.kr',
-    # 'https://therapease-dev.netlify.app/',
-    # 'https://therapease-dev-counselor.netlify.app/',
+    'https://therapease-dev.netlify.app/',
+    'https://therapease-dev-counselor.netlify.app/',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
