@@ -6,7 +6,8 @@ from accounts.models import User
 from .models import Emotion
 from .serializers import EmotionSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from django.db.models import Min
+from django.utils import timezone
 
 class IsClientUser(BasePermission):
     def has_permission(self, request, view):
@@ -56,11 +57,13 @@ class EmotionListView(APIView):
     def get(self, request, account_id):
         user = User.objects.get(id=account_id)
 
-        # date_joined를 기준으로 감정 기록을 필터링합니다.
+        # date_joined를 기준으로 감정 기록을 필터링
         emotions = Emotion.objects.filter(account=user, created_at__gte=user.date_joined).order_by('-created_at')
 
         # totalCount 계산
-        total_count = emotions.count()
+        first_registration_date = user.date_joined.date()
+        today = timezone.now().date()
+        total_count = (today - first_registration_date).days
 
         page = request.query_params.get('page', 1)
         page_size = 7
