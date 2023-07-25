@@ -55,7 +55,12 @@ class EmotionListView(APIView):
 
     def get(self, request, account_id):
         user = User.objects.get(id=account_id)
-        emotions = Emotion.objects.filter(account=user).order_by('-created_at')
+
+        # date_joined를 기준으로 감정 기록을 필터링합니다.
+        emotions = Emotion.objects.filter(account=user, created_at__gte=user.date_joined).order_by('-created_at')
+
+        # totalCount 계산
+        total_count = emotions.count()
 
         page = request.query_params.get('page', 1)
         page_size = 7
@@ -81,6 +86,7 @@ class EmotionListView(APIView):
 
         response_data = {
             'page': int(page),
+            'totalCount': total_count,
             'records': emotions_data,
         }
         return Response(response_data)
