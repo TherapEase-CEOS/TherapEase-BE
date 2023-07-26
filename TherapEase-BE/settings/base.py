@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ['*']
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(weeks=4),
+    'ACCESS_TOKEN_LIFETIME': timedelta(weeks=5),
 }
 
 ##CORS
