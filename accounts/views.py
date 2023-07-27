@@ -17,11 +17,18 @@ def check_token(request):
     user = request.user
 
     try:
+        if user.code.startswith('ee'):
+            role = 'counselee'
+        elif user.code.startswith('or'):
+            role = 'counselor'
+        else:
+            raise serializers.ValidationError("유효하지 않은 코드입니다.")
+
         data = {
             'id': user.id,
             'name': user.name,
             'code': user.code,
-            'role': user.role,
+            'role': role,
         }
     except AuthenticationFailed:
         data = None
