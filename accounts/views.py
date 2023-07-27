@@ -6,17 +6,7 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-<<<<<<< HEAD
-<<<<<<< HEAD
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
-class UserLoginView(APIView) :
-=======
-from rest_framework.decorators import api_view, permission_classes
-=======
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
->>>>>>> origin/main
 from rest_framework_simplejwt.exceptions import TokenError, AuthenticationFailed
 
 
@@ -86,21 +76,3 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
         return self.update(request, *args, **kwargs)
 
 
-# refresh tkn 관련 코드 추가!
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        # get_token 메서드가 보기에 대한 새로 고침 토큰을 생성하고 다시 보기의 액세스 토큰을 생성
-        token = super().get_token(user)
-
-        # Add custom claims
-        token['username'] = user.name
-        # ...
-        token['code'] = user.code
-        token['role'] = user.role
-        token['accountId'] = user.accountId
-
-        return token
-
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
