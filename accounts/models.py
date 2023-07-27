@@ -4,15 +4,14 @@ from django.db import models
 
 class User(AbstractUser):
     ROLE_CHOICES = (
-        ('상담사', '상담사'),
-        ('내담자', '내담자'),
+        ('counselor', 'counselor'),
+        ('counselee', 'counselee'),
     )
 
     code = models.CharField(max_length=100)
     role = models.CharField(max_length=50)
     accountId = models.CharField(max_length=100)
     name = models.CharField(max_length=10)
-
 
 class Counselor(models.Model):
     # user 모델과 profile을 1:1로 연결
