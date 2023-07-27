@@ -1,14 +1,14 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from counselees import serializers
-from .models import Counselor, User
+from .models import Counselor
 from .serializer import LoginSerializer, CounselorProfileSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework_simplejwt.exceptions import TokenError, AuthenticationFailed
+from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
 
 @api_view(['GET'])
