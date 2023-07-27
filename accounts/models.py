@@ -11,6 +11,7 @@ class User(AbstractUser):
     role = models.CharField(max_length=50)
     accountId = models.CharField(max_length=100)
     name = models.CharField(max_length=10)
+    parter = models.IntegerField(default=0)
 
 class Counselor(models.Model):
     # user 모델과 profile을 1:1로 연결
