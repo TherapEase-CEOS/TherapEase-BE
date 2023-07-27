@@ -1,3 +1,5 @@
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from .models import Counselor, User
 from .serializer import LoginSerializer, CounselorProfileSerializer
 from rest_framework import generics
@@ -5,16 +7,21 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 <<<<<<< HEAD
+<<<<<<< HEAD
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class UserLoginView(APIView) :
 =======
 from rest_framework.decorators import api_view, permission_classes
+=======
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+>>>>>>> origin/main
 from rest_framework_simplejwt.exceptions import TokenError, AuthenticationFailed
 
 
-@api_view(['POST'])
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])  # JWTAuthentication 사용
 @permission_classes([IsAuthenticated])
 def check_token(request):
     user = request.user
@@ -31,8 +38,8 @@ def check_token(request):
 
     return Response(data)
 
+
 class UserLoginView(APIView):
->>>>>>> main
     permission_classes = [AllowAny]
 
     def post(self, request):
