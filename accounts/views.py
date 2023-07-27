@@ -1,5 +1,6 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from counselees import serializers
 from .models import Counselor, User
 from .serializer import LoginSerializer, CounselorProfileSerializer
 from rest_framework import generics
