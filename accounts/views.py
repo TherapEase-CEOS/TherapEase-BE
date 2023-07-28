@@ -3,13 +3,14 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from counselees import serializers
 from .models import Counselor
 from .serializer import LoginSerializer, CounselorProfileSerializer
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 @api_view(['GET'])
@@ -86,14 +87,14 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def logout(request):
-    try:
-        # 현재 사용자의 토큰을 무효화하여 로그아웃 처리
-        refresh_token = request.data.get('refresh')
-        token = RefreshToken(refresh_token)
-        token.blacklist()
-        return Response({"detail": "로그아웃되었습니다."}, status=200)
-    except Exception as e:
-        return Response({"detail": "로그아웃에 실패했습니다."}, status=400)
+class LogoutView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        # refresh 토큰을 블랙리스트에 추가하여 무효화합니다.
+        refresh_token = request.data.get("refresh")
+        if refresh_token:
+            try:
+                refresh_token = RefreshToken(refresh_token)
+                refresh_token.blacklist()
+            except Exception as e:
+                pass  # 필요에 따라 예외 처리를 추가합니다.
+        return Response(status=status.HTTP_204_NO_CONTENT)
