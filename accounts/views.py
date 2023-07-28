@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 @api_view(['GET'])
@@ -85,3 +86,14 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout(request):
+    try:
+        # 현재 사용자의 토큰을 무효화하여 로그아웃 처리
+        refresh_token = request.data.get('refresh')
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+        return Response({"detail": "로그아웃되었습니다."}, status=200)
+    except Exception as e:
+        return Response({"detail": "로그아웃에 실패했습니다."}, status=400)
