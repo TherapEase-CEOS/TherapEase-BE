@@ -25,18 +25,15 @@ class ScheduleView(APIView):
                     "thursday": [False] * 15,
                     "friday": [False] * 15,
                     "saturday": [False] * 15,
-                    "latestUpdated": None,
                 }
-                return Response({'data': [default_schedule_data]})
+                return Response({'data': {'latestUpdated': None, **default_schedule_data}})
 
             serializer = ScheduleSerializer(schedules, many=True)
             return Response({'data': serializer.data})
         else:
             try:
-                schedule = Schedule.objects.annotate(
-                    latestUpdated=F('latestUpdated')
-                ).get(pk=pk)
+                schedule = Schedule.objects.get(pk=pk)
                 serializer = ScheduleSerializer(schedule)
-                return Response(serializer.data)
+                return Response({'data': serializer.data})
             except Schedule.DoesNotExist:
                 return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
