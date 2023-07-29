@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from .models import Schedule
 from .serializers import ScheduleSerializer
+from django.db.models import F
 
 
 class ScheduleView(APIView):
@@ -24,6 +25,7 @@ class ScheduleView(APIView):
                     "thursday": [False] * 15,
                     "friday": [False] * 15,
                     "saturday": [False] * 15,
+                    "latestUpdated": None,
                 }
                 return Response({'data': [default_schedule_data]})
 
@@ -31,7 +33,9 @@ class ScheduleView(APIView):
             return Response({'data': serializer.data})
         else:
             try:
-                schedule = Schedule.objects.get(pk=pk)
+                schedule = Schedule.objects.annotate(
+                    latestUpdated=F('latestUpdated')
+                ).get(pk=pk)
                 serializer = ScheduleSerializer(schedule)
                 return Response(serializer.data)
             except Schedule.DoesNotExist:
