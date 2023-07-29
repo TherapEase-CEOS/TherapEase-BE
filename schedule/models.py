@@ -9,7 +9,7 @@ class Schedule(models.Model):
     thursday = models.JSONField(default=list)
     friday = models.JSONField(default=list)
     saturday = models.JSONField(default=list)
-    latestUpdated = models.DateField(null=True, blank=True, default=date.today)
+    latestUpdated = models.DateField(null=True, blank=True, default=date.today, auto_now=True)
 
     def __str__(self):
         return f"Schedule - {self.latestUpdated}"
