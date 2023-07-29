@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from rest_framework_simplejwt.exceptions import TokenError
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])  # JWTAuthentication 사용
@@ -95,6 +95,8 @@ class LogoutView(TokenObtainPairView):
             try:
                 refresh_token = RefreshToken(refresh_token)
                 refresh_token.blacklist()
+                return Response(status=status.HTTP_204_NO_CONTENT)  # 성공적으로 로그아웃
             except Exception as e:
-                pass  # 필요에 따라 예외 처리를 추가합니다.
-        return Response(status=status.HTTP_204_NO_CONTENT)
+                return Response({"error": "로그아웃에 실패했습니다."}, status=status.HTTP_400_BAD_REQUEST)  # 실패 응답 처리
+        else:
+            return Response({"error": "로그아웃에 실패했습니다."}, status=status.HTTP_400_BAD_REQUEST)  # 실패 응답 처리
