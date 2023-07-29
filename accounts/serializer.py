@@ -32,6 +32,7 @@ class LoginSerializer(serializers.Serializer):
             'name': user.name,
             'code': user.code,
             'role': role,
+            'accountId': user.accountId,
             'refresh': str(refresh),
             'access': str(access),
         }
