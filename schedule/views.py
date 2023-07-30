@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -37,3 +39,20 @@ class ScheduleView(APIView):
                 return Response({'data': serializer.data})
             except Schedule.DoesNotExist:
                 return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
+
+    def put(self, request):
+        try:
+            schedule = Schedule.objects.first()
+        except Schedule.DoesNotExist:
+            return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
+
+        serializer = ScheduleSerializer(schedule, data=request.data)
+        if serializer.is_valid():
+
+            response_data = {
+                'latestUpdated': date.today().strftime('%Y-%m-%d'),
+                'data': serializer.data
+            }
+            return Response(response_data)
+        else:
+            return Response(serializer.errors, status=400)
