@@ -48,7 +48,7 @@ class ScheduleView(APIView):
 
         serializer = ScheduleSerializer(schedule, data=request.data)
         if serializer.is_valid():
-
+            serializer.save()
             response_data = {
                 'latestUpdated': date.today().strftime('%Y-%m-%d'),
                 'data': serializer.data
