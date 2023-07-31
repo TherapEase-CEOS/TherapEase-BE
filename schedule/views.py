@@ -40,13 +40,19 @@ class ScheduleView(APIView):
             except Schedule.DoesNotExist:
                 return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
 
-    def put(self, request, pk):
+    def put(self, request):
         try:
-            schedule = Schedule.objects.get(pk=pk)
-            serializer = ScheduleSerializer(schedule, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=400)
+            schedule = Schedule.objects.first()
         except Schedule.DoesNotExist:
             return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
+
+        serializer = ScheduleSerializer(schedule, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            response_data = {
+                'latestUpdated': date.today().strftime('%Y-%m-%d'),
+                'data': serializer.data
+            }
+            return Response(response_data)
+        else:
+            return Response(serializer.errors, status=400)
