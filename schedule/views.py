@@ -40,9 +40,9 @@ class ScheduleView(APIView):
             except Schedule.DoesNotExist:
                 return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
 
-    def put(self, request):
+    def put(self, request, pk=None):
         try:
-            schedule = Schedule.objects.first()
+            schedule = Schedule.objects.get(pk=pk)
         except Schedule.DoesNotExist:
             return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
 
