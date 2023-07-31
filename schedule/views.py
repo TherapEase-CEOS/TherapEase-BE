@@ -19,9 +19,8 @@ class ScheduleView(APIView):
         if pk is None:
             schedules = Schedule.objects.all()
 
-            # Check if any schedule exists
+            # 시간표가 없을 때 기본 값을 반환합니다.
             if not schedules.exists():
-                # If no schedule exists, return default values
                 default_schedule_data = {
                     "sunday": [False] * 15,
                     "monday": [False] * 15,
@@ -31,15 +30,18 @@ class ScheduleView(APIView):
                     "friday": [False] * 15,
                     "saturday": [False] * 15,
                 }
-                return Response({'data': [{'latestUpdated': formatted_datetime}, default_schedule_data]})
+                response_data = {'latestUpdated': formatted_datetime, 'data': [default_schedule_data]}
+                return Response(response_data)
 
             serializer = ScheduleSerializer(schedules, many=True)
-            return Response({'latestUpdated': formatted_datetime, 'data': serializer.data})
+            response_data = {'latestUpdated': formatted_datetime, 'data': serializer.data}
+            return Response(response_data)
         else:
             try:
                 schedule = Schedule.objects.get(pk=pk)
                 serializer = ScheduleSerializer(schedule)
-                return Response({'data': serializer.data})
+                response_data = {'latestUpdated': formatted_datetime, 'data': serializer.data}
+                return Response(response_data)
             except Schedule.DoesNotExist:
                 return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
 
@@ -52,10 +54,7 @@ class ScheduleView(APIView):
         serializer = ScheduleSerializer(schedule, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            response_data = {
-                'latestUpdated': formatted_datetime,
-                'data': serializer.data
-            }
+            response_data = {'latestUpdated': formatted_datetime, 'data': serializer.data}
             return Response(response_data)
         else:
             return Response(serializer.errors, status=400)
