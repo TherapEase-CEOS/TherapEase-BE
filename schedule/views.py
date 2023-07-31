@@ -8,7 +8,7 @@ from .models import Schedule
 from .serializers import ScheduleSerializer
 from django.db.models import F
 
-#시간 반환형식 변경
+# 시간 반환형식 변경
 current_datetime = datetime.now()
 formatted_datetime = current_datetime.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -34,7 +34,7 @@ class ScheduleView(APIView):
                 return Response({'latestUpdated': None, 'data': {**default_schedule_data}})
 
             serializer = ScheduleSerializer(schedules, many=True)
-            return Response({'data': serializer.data})
+            return Response({'latestUpdated': formatted_datetime, 'data': serializer.data})
         else:
             try:
                 schedule = Schedule.objects.get(pk=pk)
