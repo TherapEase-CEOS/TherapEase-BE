@@ -31,7 +31,7 @@ class ScheduleView(APIView):
                     "friday": [False] * 15,
                     "saturday": [False] * 15,
                 }
-                return Response({'latestUpdated': None, 'data': {**default_schedule_data}})
+                return Response({'latestUpdated': formatted_datetime, 'data': {**default_schedule_data}})
 
             serializer = ScheduleSerializer(schedules, many=True)
             return Response({'latestUpdated': formatted_datetime, 'data': serializer.data})
