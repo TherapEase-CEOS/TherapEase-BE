@@ -9,8 +9,8 @@ from .serializers import ScheduleSerializer
 from django.db.models import F
 
 # 시간 반환형식 변경
-current_datetime = datetime.now()
-formatted_datetime = current_datetime.strftime('%Y-%m-%d %H:%M:%S')
+#current_datetime = datetime.now()
+#formatted_datetime = current_datetime.strftime('%Y-%m-%d %H:%M:%S')
 
 class ScheduleView(APIView):
     permission_classes = [IsAuthenticated]
@@ -30,17 +30,19 @@ class ScheduleView(APIView):
                     "friday": [False] * 15,
                     "saturday": [False] * 15,
                 }
-                response_data = {'latestUpdated': formatted_datetime, 'data': [default_schedule_data]}
+#                response_data = {'latestUpdated': formatted_datetime, 'data': [default_schedule_data]}
+                response_data = {'data': [default_schedule_data]}
+
                 return Response(response_data)
 
             serializer = ScheduleSerializer(schedules, many=True)
-            response_data = {'latestUpdated': formatted_datetime, 'data': serializer.data}
+            response_data = {'data': serializer.data}
             return Response(response_data)
         else:
             try:
                 schedule = Schedule.objects.get(pk=pk)
                 serializer = ScheduleSerializer(schedule)
-                response_data = {'latestUpdated': formatted_datetime, 'data': serializer.data}
+                response_data = {'data': serializer.data}
                 return Response(response_data)
             except Schedule.DoesNotExist:
                 return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
@@ -54,7 +56,7 @@ class ScheduleView(APIView):
         serializer = ScheduleSerializer(schedule, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            response_data = {'latestUpdated': formatted_datetime, 'data': serializer.data}
+            response_data = {'data': serializer.data}
             return Response(response_data)
         else:
             return Response(serializer.errors, status=400)
