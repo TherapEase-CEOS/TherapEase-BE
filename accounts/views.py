@@ -1,4 +1,3 @@
-from rest_framework.exceptions import NotFound
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from counselees import serializers
@@ -58,19 +57,17 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         user = self.request.user
 
+        # 사용자가 내담자(counselee)인지 상담사(counselor)인지 확인합니다.
         if user.role == 'counselee':
             try:
                 counselor = Counselor.objects.get(counselor__accountId=user.accountId)
             except Counselor.DoesNotExist:
-                raise NotFound({"message": "연결된 상담사의 프로필이 없습니다."})
-
-        elif user.role == 'counselor':
-            # 사용자가 상담사인 경우 자신의 프로필을 가져옵니다.
-            try:
-                counselor, created = Counselor.objects.get_or_create(counselor=user)
-            except Counselor.DoesNotExist:
                 # 상담사 프로필이 없는 경우 기본 상담사 프로필을 생성합니다.
                 counselor = Counselor.objects.create(counselor=user, contact='', introduction='')
+
+        else:
+            # 사용자가 상담사인 경우 자신의 프로필을 가져옵니다.
+            counselor, created = Counselor.objects.get_or_create(counselor=user)
 
         return counselor
 
