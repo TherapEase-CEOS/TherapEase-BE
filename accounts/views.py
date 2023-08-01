@@ -4,7 +4,7 @@ from counselees import serializers
 from .models import Counselor
 from .serializer import LoginSerializer, CounselorProfileSerializer
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -49,9 +49,11 @@ class UserLoginView(APIView):
         data = serializer.validated_data
         return Response(data)
 
+class IsCounselor(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.role == 'counselor'
 
-
-class CounselorProfileView(generics.RetrieveUpdateAPIView):
+class CounselorProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
@@ -69,8 +71,6 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
             counselor, created = Counselor.objects.get_or_create(counselor=user)
         return counselor
 
-
-
     def get(self, request, *args, **kwargs):
         counselor = self.get_object()
 
@@ -87,7 +87,7 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
     def patch(self, request, *args, **kwargs):
         counselor = self.get_object()
 
-        # 상담사인 경우에만 프로필을 수정할 수 있도록 합니다.
+        # 상담사만 프로필을 수정할 수 있도록 합니다.
         if counselor and request.user.role == 'counselor':
             serializer = CounselorProfileSerializer(counselor, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
