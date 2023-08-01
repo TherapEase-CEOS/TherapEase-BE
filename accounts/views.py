@@ -4,7 +4,7 @@ from counselees import serializers
 from .models import Counselor
 from .serializer import LoginSerializer, CounselorProfileSerializer
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -49,26 +49,18 @@ class UserLoginView(APIView):
         data = serializer.validated_data
         return Response(data)
 
-class IsCounselor(BasePermission):
-    def has_permission(self, request, view):
-        return request.user.role == 'counselor'
+
 
 class CounselorProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
         user = self.request.user
-
-        # 현재 로그인된 사용자의 role이 'counselee'인 경우에는 accountId를 사용하여
-        # 해당 accountId를 가진 상담사 프로필을 찾습니다.
-        if user.role == 'counselee':
-            try:
-                counselor = Counselor.objects.get(counselor__accountId=user.accountId)
-            except Counselor.DoesNotExist:
-                counselor = None
-        else:
-            # 상담사인 경우 자신의 프로필을 조회합니다.
-            counselor, created = Counselor.objects.get_or_create(counselor=user)
+        try:
+            counselor = Counselor.objects.get(counselor=user)
+        except Counselor.DoesNotExist:
+            # 프로필이 없는 상담사일 경우 기본 프로필 생성
+            counselor = Counselor.objects.create(counselor=user, contact='', introduction='')
         return counselor
 
     def update(self, request, *args, **kwargs):
@@ -83,29 +75,18 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
     def get(self, request, *args, **kwargs):
         counselor = self.get_object()
-
-        # 상담사와 내담자를 구분하여 프로필을 반환합니다.
-        if counselor and request.user.role == 'counselee':
-            serializer = CounselorProfileSerializer(counselor)
-            return Response(serializer.data)
-        elif counselor and request.user.role == 'counselor':
-            serializer = CounselorProfileSerializer(counselor)
-            return Response(serializer.data)
-        else:
-            return Response({'message': '프로필을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CounselorProfileSerializer(counselor)
+        return Response(serializer.data)
 
     def patch(self, request, *args, **kwargs):
         counselor = self.get_object()
-        if counselor:
-            serializer = CounselorProfileSerializer(counselor, data=request.data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response({'message': '프로필을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CounselorProfileSerializer(counselor, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
     def put(self, request, *args, **kwargs):
-        return self.patch(request, *args, **kwargs)
+        return self.update(request, *args, **kwargs)
 
 
 
