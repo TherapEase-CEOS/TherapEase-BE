@@ -81,7 +81,12 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
     def get(self, request, *args, **kwargs):
         counselor = self.get_object()
-        if counselor:
+
+        # 상담사와 내담자를 구분하여 프로필을 반환합니다.
+        if counselor and request.user.role == 'counselee':
+            serializer = CounselorProfileSerializer(counselor)
+            return Response(serializer.data)
+        elif counselor and request.user.role == 'counselor':
             serializer = CounselorProfileSerializer(counselor)
             return Response(serializer.data)
         else:
