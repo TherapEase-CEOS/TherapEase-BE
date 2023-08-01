@@ -94,13 +94,15 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         counselor = self.get_object()
-        if counselor:
+
+        # 상담사인 경우에만 프로필을 수정할 수 있도록 합니다.
+        if counselor and request.user.role == 'counselor':
             serializer = CounselorProfileSerializer(counselor, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response({'message': '프로필을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': '프로필을 찾을 수 없거나 권한이 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, *args, **kwargs):
         return self.patch(request, *args, **kwargs)
