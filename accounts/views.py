@@ -58,7 +58,11 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         user = self.request.user
-        counselor, created = Counselor.objects.get_or_create(counselor=user)
+        try:
+            counselor = Counselor.objects.get(counselor=user)
+        except Counselor.DoesNotExist:
+            # 프로필이 없는 상담사일 경우 기본 프로필 생성
+            counselor = Counselor.objects.create(counselor=user, contact='', introduction='')
         return counselor
 
     def update(self, request, *args, **kwargs):
@@ -73,12 +77,12 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
     def get(self, request, *args, **kwargs):
         counselor = self.get_object()
-        serializer = self.get_serializer(counselor)
+        serializer = CounselorProfileSerializer(counselor)
         return Response(serializer.data)
 
     def patch(self, request, *args, **kwargs):
         counselor = self.get_object()
-        serializer = self.get_serializer(counselor, data=request.data, partial=True)
+        serializer = CounselorProfileSerializer(counselor, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
