@@ -1,9 +1,11 @@
 from datetime import date, datetime
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from .models import Schedule
 from .serializers import ScheduleSerializer
 from django.db.models import F
@@ -12,8 +14,20 @@ from django.db.models import F
 #current_datetime = datetime.now()
 #formatted_datetime = current_datetime.strftime('%Y-%m-%d %H:%M:%S')
 
+class IsClientUser(BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        return user.role == "내담자"
+
 class ScheduleView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsClientUser]
+
+    def is_client_user(self, request):
+        try:
+            user, _ = JWTAuthentication().authenticate(request)
+            return user.role == "내담자"
+        except Exception as e:
+            return False
 
     def get(self, request, pk=None):
         if pk is None:
@@ -48,6 +62,10 @@ class ScheduleView(APIView):
                 return Response({'message': '시간표를 찾을 수 없습니다.'}, status=404)
 
     def put(self, request, pk=None):
+        is_client = self.is_client_user(request)
+        if is_client:
+            return Response({"detail": "상담사만 상담일정표를 수정할 수 있습니다."}, status=403)
+
         try:
             schedule = Schedule.objects.get(pk=pk)
         except Schedule.DoesNotExist:
