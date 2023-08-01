@@ -53,16 +53,20 @@ class UserLoginView(APIView):
 
 class CounselorProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = Counselor.objects.all()
-    serializer_class = CounselorProfileSerializer
 
     def get_object(self):
         user = self.request.user
-        try:
-            counselor = Counselor.objects.get(counselor=user)
-        except Counselor.DoesNotExist:
-            # 프로필이 없는 상담사일 경우 기본 프로필 생성
-            counselor = Counselor.objects.create(counselor=user, contact='', introduction='')
+
+        # 현재 로그인된 사용자의 role이 'counselee'인 경우에는 accountId를 사용하여
+        # 해당 accountId를 가진 상담사 프로필을 찾습니다.
+        if user.role == 'counselee':
+            try:
+                counselor = Counselor.objects.get(counselor__accountId=user.accountId)
+            except Counselor.DoesNotExist:
+                counselor = None
+        else:
+            # 상담사인 경우 자신의 프로필을 조회합니다.
+            counselor, created = Counselor.objects.get_or_create(counselor=user)
         return counselor
 
     def update(self, request, *args, **kwargs):
@@ -77,18 +81,24 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
     def get(self, request, *args, **kwargs):
         counselor = self.get_object()
-        serializer = CounselorProfileSerializer(counselor)
-        return Response(serializer.data)
+        if counselor:
+            serializer = CounselorProfileSerializer(counselor)
+            return Response(serializer.data)
+        else:
+            return Response({'message': '프로필을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request, *args, **kwargs):
         counselor = self.get_object()
-        serializer = CounselorProfileSerializer(counselor, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        if counselor:
+            serializer = CounselorProfileSerializer(counselor, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response({'message': '프로필을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+        return self.patch(request, *args, **kwargs)
 
 
 
