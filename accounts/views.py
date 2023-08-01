@@ -69,15 +69,7 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
             counselor, created = Counselor.objects.get_or_create(counselor=user)
         return counselor
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
 
-    def partial_update(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         counselor = self.get_object()
