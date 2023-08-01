@@ -56,11 +56,19 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         user = self.request.user
-        try:
-            counselor = Counselor.objects.get(counselor=user)
-        except Counselor.DoesNotExist:
-            # 프로필이 없는 상담사일 경우 기본 프로필 생성
-            counselor = Counselor.objects.create(counselor=user, contact='', introduction='')
+
+        # 사용자가 내담자(counselee)인지 상담사(counselor)인지 확인합니다.
+        if user.role == 'counselee':
+            try:
+                counselor = Counselor.objects.get(counselor__accountId=user.accountId)
+            except Counselor.DoesNotExist:
+                # 상담사 프로필이 없는 경우 기본 상담사 프로필을 생성합니다.
+                counselor = Counselor.objects.create(counselor=user, contact='', introduction='')
+
+        else:
+            # 사용자가 상담사인 경우 자신의 프로필을 가져옵니다.
+            counselor, created = Counselor.objects.get_or_create(counselor=user)
+
         return counselor
 
     def update(self, request, *args, **kwargs):
