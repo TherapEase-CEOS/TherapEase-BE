@@ -46,9 +46,5 @@ class CounselorProfileSerializer(serializers.ModelSerializer):
         model = Counselor
         fields = ('name', 'contact', 'introduction')
 
-    def create(self, validated_data):
-        # 기본 프로필 생성
-        return Counselor.objects.create(**validated_data)
-
 
 

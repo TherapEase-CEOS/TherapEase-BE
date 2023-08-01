@@ -16,17 +16,11 @@ class IsClientUser(BasePermission):
         return user.role == "내담자"
 
 class ScheduleView(APIView):
-    permission_classes = [IsAuthenticated, IsClientUser]
-
-    def is_client_user(self, request):
-        try:
-            user, _ = JWTAuthentication().authenticate(request)
-            return user.role == "내담자"
-        except Exception as e:
-            return False
+    # permission_classes = [IsAuthenticated, IsClientUser]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk=None):
-        account_id = request.user.accountId # accountId를 받는다
+        account_id = int(request.user.accountId) # accountId를 받는다
 
         try:
             schedule = Schedule.objects.get(pk=account_id) # account_id에 해당되는 id의 상담일정표를 받음
@@ -43,14 +37,17 @@ class ScheduleView(APIView):
                 "friday": [False] * 15,
                 "saturday": [False] * 15,
             }
+            new_schedule = Schedule(pk=account_id, **default_schedule_data)
+            new_schedule.save()
+
             response_data = {'data': [default_schedule_data]}
             return Response(response_data)
 
     def put(self, request, pk=None):
-        is_client = self.is_client_user(request)
-        if is_client: # 내담자이면
-            return Response({"detail": "상담사만 상담일정표를 수정할 수 있습니다."}, status=403)
-        else : # 상담사이면
+        # is_client = self.is_client_user(request)
+       # if is_client: # 내담자이면
+       #     return Response({"detail": "상담사만 상담일정표를 수정할 수 있습니다."}, status=403)
+       # else : # 상담사이면
             try:
                 schedule = Schedule.objects.get(pk=pk)
             except Schedule.DoesNotExist:
