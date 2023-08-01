@@ -32,6 +32,7 @@ def check_token(request):
             'name': user.name,
             'code': user.code,
             'role': role,
+            'accountId': user.accountId,
         }
     except AuthenticationFailed:
         data = None
