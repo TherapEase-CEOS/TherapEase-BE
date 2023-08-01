@@ -53,7 +53,7 @@ class IsCounselor(BasePermission):
     def has_permission(self, request, view):
         return request.user.role == 'counselor'
 
-class CounselorProfileView(APIView):
+class CounselorProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
@@ -71,6 +71,16 @@ class CounselorProfileView(APIView):
             counselor, created = Counselor.objects.get_or_create(counselor=user)
         return counselor
 
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         counselor = self.get_object()
 
@@ -86,15 +96,13 @@ class CounselorProfileView(APIView):
 
     def patch(self, request, *args, **kwargs):
         counselor = self.get_object()
-
-        # 상담사만 프로필을 수정할 수 있도록 합니다.
-        if counselor and request.user.role == 'counselor':
+        if counselor:
             serializer = CounselorProfileSerializer(counselor, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response({'message': '프로필을 찾을 수 없거나 권한이 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': '프로필을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, *args, **kwargs):
         return self.patch(request, *args, **kwargs)
