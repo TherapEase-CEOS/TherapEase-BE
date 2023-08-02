@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.exceptions import TokenError
+from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])  # JWTAuthentication 사용
@@ -59,11 +59,7 @@ class CounselorProfileView(generics.RetrieveUpdateAPIView):
 
         # 사용자가 내담자(counselee)인지 상담사(counselor)인지 확인합니다.
         if user.role == 'counselee':
-            try:
-                counselor = Counselor.objects.get(counselor__accountId=user.accountId)
-            except Counselor.DoesNotExist:
-                # 상담사 프로필이 없는 경우 기본 상담사 프로필을 생성합니다.
-                counselor = Counselor.objects.create(counselor=user, contact='', introduction='')
+            counselor = get_object_or_404(Counselor, counselor__accountId=user.accountId)
 
         else:
             # 사용자가 상담사인 경우 자신의 프로필을 가져옵니다.
