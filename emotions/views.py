@@ -54,11 +54,11 @@ class EmotionCreateView(APIView):
 class EmotionListView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, account_id):
-        user = User.objects.get(id=account_id)
+    def get(self, request, id):
+        user = User.objects.get(id=id)
 
         # date_joined를 기준으로 감정 기록을 필터링
-        emotions = Emotion.objects.filter(account=user, created_at__gte=user.date_joined).order_by('-created_at')
+        emotions = Emotion.objects.filter(account=user).order_by('-created_at')
 
         # totalCount 계산
         first_registration_date = user.date_joined.date()
