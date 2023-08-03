@@ -15,7 +15,7 @@ class IsClientUser(BasePermission):
         return user.role == "내담자"
 
 class EmotionCreateView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsClientUser]
 
     def is_client_user(self, request):
         try:
