@@ -72,10 +72,11 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:3000',
     'http://localhost:3000',
-    'http://ec2-43-201-83-172.ap-northeast-2.compute.amazonaws.com',
+    'http://ec2-43-201-146-29.ap-northeast-2.compute.amazonaws.com',
     'https://therapease.co.kr',
     'https://therapease-dev.netlify.app',
     'https://therapease-dev-counselor.netlify.app',
+    'https://therapease.site/',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
