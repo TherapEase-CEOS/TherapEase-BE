@@ -1,3 +1,3 @@
 # TherapEase Backend
-.
+
 
