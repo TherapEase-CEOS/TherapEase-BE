@@ -146,7 +146,6 @@
 
 <h2>📚 팀 Therapease 개발 일지</h2>
 
-- [Next.js 13에서 React-query 사용하기](https://just-pruner-b0e.notion.site/Next-js-13-React-query-9c9775da9aa64f74a7506ee2110540ce?pvs=4)  
 - [유저 인증(Authentification) 및 유저 권한 (Authorization) ](https://www.notion.so/34effad6d1024898a3af543c39057261)  
 
 
