@@ -45,16 +45,16 @@
 
   <table>
     <tr>
-      <td align="center"><img src="https://github.com/flowersayo.png" width="160"></td>
-      <td align="center"><img src="https://github.com/Gaeun-Kwon.png" width="160"></td>
+      <td align="center"><img src="https://github.com/Hwang-Jaeryeong.png" width="160"></td>
+      <td align="center"><img src="https://github.com/doleebest.png" width="160"></td>
     </tr>
     <tr>
-      <td align="center">FE 김서연</td>
-      <td align="center">FE 권가은</td>
+      <td align="center">BE 황재령</td>
+      <td align="center">BE 이소정</td>
     </tr>
     <tr>
-      <td align="center"><a href="https://github.com/HyewonKkang" target="_blank">@flowersayo</a></td>
-      <td align="center"><a href="https://github.com/yscriuf" target="_blank" width="160">@Gaeun-Kwon</a></td>
+      <td align="center"><a href="https://github.com/Hwang-Jaeryeong" target="_blank">@Hwang-Jaeryeong</a></td>
+      <td align="center"><a href="https://github.com/doleebest" target="_blank" width="160">@doleebest</a></td>
     </tr>
   </table>
 
